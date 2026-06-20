@@ -1,8 +1,8 @@
-# 🚀 Jenkins WAR Deployment to Tomcat using Jenkins Agent
+# 🚀 Jenkins WAR Deployment to Tomcat Using Jenkins Agent
 
 ## 📌 Project Overview
 
-This project demonstrates how to build a Java WAR application using Jenkins and deploy it to an Apache Tomcat server running on a Jenkins Agent (Linux Slave).
+This project demonstrates how to build and deploy a Java WAR application on Apache Tomcat using Jenkins Master-Agent Architecture. Jenkins Server triggers the build, Maven generates the WAR file on Jenkins Agent, and the Deploy to Container Plugin deploys the application to Tomcat automatically.
 
 ---
 
@@ -26,8 +26,8 @@ Jenkins Agent (Linux-Slave)
 
 | Component      | Details                    |
 | -------------- | -------------------------- |
-| Jenkins Server | EC2 Instance               |
-| Jenkins Agent  | EC2 Instance               |
+| Jenkins Server | AWS EC2                    |
+| Jenkins Agent  | AWS EC2                    |
 | OS             | Ubuntu 24.04               |
 | Java           | OpenJDK 21                 |
 | Maven          | 3.8.7                      |
@@ -36,11 +36,55 @@ Jenkins Agent (Linux-Slave)
 
 ---
 
-## 🔄 Deployment Flow
+## 🍴 Repository Information
+
+### Original Repository
+
+```text
+https://github.com/kunalc881/demo-java-war.git
+```
+
+### Forked Repository Used
+
+```text
+https://github.com/sumedh-hiwale/demo-java-war.git
+```
+
+### Issue Identified
+
+The original repository used an older Maven WAR Plugin version which was incompatible with Java 21.
+
+### Fix Applied
+
+File Modified:
+
+```text
+pom.xml
+```
+
+Updated:
+
+```xml
+<artifactId>maven-war-plugin</artifactId>
+<version>3.0.0</version>
+```
+
+To:
+
+```xml
+<artifactId>maven-war-plugin</artifactId>
+<version>3.4.0</version>
+```
+
+Changes were committed to the forked repository and used for deployment.
+
+---
+
+# 🚀 Deployment Flow
 
 ### 1️⃣ Verify Jenkins Agent Connection
 
-✔ Jenkins Agent connected successfully to Jenkins Server.
+* Jenkins Agent connected successfully to Jenkins Server.
 
 ---
 
@@ -123,16 +167,16 @@ Host Manager URL:
 http://<Agent-IP>:8080/host-manager/html
 ```
 
-Login Credentials:
+Credentials:
 
 ```text
-Username: tomcat
-Password: 1
+Username : tomcat
+Password : 1
 ```
 
 ---
 
-### 6️⃣ Install Jenkins Deployment Plugin
+### 6️⃣ Install Deploy to Container Plugin
 
 ```text
 Manage Jenkins
@@ -141,11 +185,9 @@ Manage Jenkins
 → Deploy to Container Plugin
 ```
 
-Install Plugin Successfully.
-
 ---
 
-### 7️⃣ Create Tomcat Credentials in Jenkins
+### 7️⃣ Create Tomcat Credentials
 
 ```text
 Manage Jenkins
@@ -155,7 +197,7 @@ Manage Jenkins
 → Add Credentials
 ```
 
-Credential Type:
+Type:
 
 ```text
 Username with Password
@@ -171,43 +213,7 @@ ID       : tomcat-creds
 
 ---
 
-### 8️⃣ Fork Demo Repository
-
-Original Repository:
-
-```text
-https://github.com/kunalc881/demo-java-war.git
-```
-
-Fork Repository to your GitHub account.
-
----
-
-### 9️⃣ Fix Maven WAR Plugin Issue
-
-Edit:
-
-```text
-pom.xml
-```
-
-Replace:
-
-```xml
-<version>3.0.0</version>
-```
-
-With:
-
-```xml
-<version>3.4.0</version>
-```
-
-Commit Changes.
-
----
-
-### 🔟 Create Jenkins Freestyle Job
+### 8️⃣ Create Freestyle Job
 
 Job Name:
 
@@ -229,12 +235,12 @@ Linux-Slave
 
 ---
 
-### 1️⃣1️⃣ Configure Git Repository
+### 9️⃣ Configure Git Repository
 
 Repository URL:
 
 ```text
-https://github.com/<your-github-username>/demo-java-war.git
+https://github.com/sumedh-hiwale/demo-java-war.git
 ```
 
 Branch:
@@ -245,7 +251,7 @@ Branch:
 
 ---
 
-### 1️⃣2️⃣ Configure Maven Build
+### 🔟 Configure Maven Build
 
 Build Step:
 
@@ -261,7 +267,7 @@ clean install
 
 ---
 
-### 1️⃣3️⃣ Configure Tomcat Deployment
+### 1️⃣1️⃣ Configure Deployment
 
 Post Build Action:
 
@@ -301,7 +307,7 @@ http://54.221.97.230:8080
 
 ---
 
-### 1️⃣4️⃣ Build and Deploy
+### 1️⃣2️⃣ Build and Deploy
 
 Trigger Build:
 
@@ -312,7 +318,10 @@ Build Now
 Successful Output:
 
 ```text
-Deploying demo.war
+DeployPublisher][INFO] Attempting to deploy 1 war file(s)
+
+DeployPublisher][INFO] Deploying demo.war to container Tomcat 9.x Remote with context sumedh
+
 Finished: SUCCESS
 ```
 
@@ -326,30 +335,29 @@ Application URL:
 http://54.221.97.230:8080/sumedh
 ```
 
-Output:
+Verification:
 
-```text
-Welcome to Jenkins
-Welcome to Chhatrapati Sambhajinagar
-```
+✅ Application opened successfully
+
+✅ WAR deployed successfully
+
+✅ Jenkins to Tomcat deployment completed
 
 ---
 
-## ✅ Result
+## 📂 Files Modified
 
-✔ Jenkins Agent Connected Successfully
+### Jenkins Agent
 
-✔ Maven Installed Successfully
+```text
+/etc/tomcat10/tomcat-users.xml
+```
 
-✔ Tomcat Installed Successfully
+### GitHub Repository
 
-✔ WAR File Generated Successfully
-
-✔ WAR File Deployed Successfully
-
-✔ Application Accessible via Browser
-
-✔ End-to-End Jenkins to Tomcat Deployment Completed Successfully 🎉
+```text
+pom.xml
+```
 
 ---
 
@@ -357,8 +365,60 @@ Welcome to Chhatrapati Sambhajinagar
 
 * Jenkins Master-Agent Architecture
 * Maven Build Automation
-* Apache Tomcat Configuration
+* Apache Tomcat Administration
 * Jenkins Credentials Management
 * Deploy to Container Plugin
 * WAR Deployment Automation
+* Build Troubleshooting
+* Repository Forking and Code Fixes
 * End-to-End CI/CD Deployment Workflow
+
+---
+
+## ✅ Result
+
+✔ Jenkins Server Connected to Agent
+
+✔ Maven Installed Successfully
+
+✔ Tomcat Installed Successfully
+
+✔ Tomcat Manager Configured
+
+✔ Jenkins Credentials Created
+
+✔ WAR File Generated Successfully
+
+✔ WAR File Deployed Successfully
+
+✔ Application Accessible via Browser
+
+✔ End-to-End Jenkins → Maven → Tomcat Deployment Completed Successfully 🎉
+
+---
+
+## 📖 Flow Summary
+
+```text
+Jenkins Server
+      ↓
+Trigger Build
+      ↓
+Jenkins Agent
+      ↓
+Git Clone (Forked Repository)
+      ↓
+Maven Build
+      ↓
+WAR File Generated
+      ↓
+Deploy to Container Plugin
+      ↓
+Tomcat Server
+      ↓
+Application Deployment
+      ↓
+Browser Verification
+```
+
+🎉 Demo Completed Successfully
